@@ -1,0 +1,40 @@
+#include <Adafruit_LiquidCrystal.h>
+
+Adafruit_LiquidCrystal lcd(0);
+
+float input_volt = 0.0;
+float temp = 0.0;
+float r1 = 100000.0;
+float r2 = 10000.0;  
+
+void setup()
+{
+   Serial.begin(9600);     
+   lcd.begin(16, 2);      
+   lcd.setBacklight(1);
+   lcd.print("VOLTMETER READY!");
+   delay(2000);          
+   lcd.clear();         
+}
+
+void loop()
+{
+    int analogvalue = analogRead(A0);          
+    temp = (analogvalue * 5.0) / 1024.0;     
+    input_volt = temp / (r2 / (r1 + r2));   
+
+    if (input_volt < 0.1) 
+    {
+        input_volt = 0.0;                    
+    }
+
+
+    lcd.setCursor(0, 0);               
+    lcd.print("Voltage");                 
+    lcd.setCursor(0, 1);                     
+    lcd.print("v= ");                        
+    lcd.print(input_volt);                     
+    lcd.print(" V");                           
+
+    delay(300);                            
+}
